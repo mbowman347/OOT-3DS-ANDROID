@@ -10,7 +10,6 @@ import subprocess
 def stage(runtime: Path, title: Path, ndk: Path, output: Path) -> None:
     llvm = ndk / "toolchains/llvm/prebuilt/linux-x86_64"
     source = {
-        "libSDL2.so": runtime / "_deps/sdl2-build/libSDL2.so",
         "libTriAevum.so": runtime / "product/libTriAevum.so",
         "libtriaevum_title_bootstrap.so": runtime / "product/libtriaevum_title_bootstrap.so",
         "libtriaevum_title_aot.so": title,

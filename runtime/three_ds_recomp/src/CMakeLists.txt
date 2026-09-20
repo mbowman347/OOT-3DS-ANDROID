@@ -173,6 +173,10 @@ if (USE_OPENGLES)
     endif()
 endif()
 
+if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+    target_link_libraries(three_ds_recomp_runtime PRIVATE aaudio android)
+endif()
+
 target_link_libraries(three_ds_recomp_runtime PUBLIC prism monocypher)
 
 if(THREE_DS_RECOMP_ENABLE_VULKAN)
@@ -281,6 +285,12 @@ if (CMAKE_SYSTEM_NAME STREQUAL "iOS")
             XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
         )
     endif()
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Android")
+    target_compile_definitions(three_ds_recomp_runtime PRIVATE
+        $<$<CONFIG:Debug>:_DEBUG>
+        $<$<NOT:$<CONFIG:Debug>>:NDEBUG>
+        SPDLOG_ACTIVE_LEVEL=${SPDLOG_MIN_CUTOFF}
+    )
 else()
     target_compile_definitions(three_ds_recomp_runtime PRIVATE
         ENABLE_OPENGL

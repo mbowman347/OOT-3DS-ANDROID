@@ -1,5 +1,7 @@
 #include "ship/controller/physicaldevice/SDLAddRemoveDeviceEventHandler.h"
+#if !defined(__ANDROID__)
 #include <SDL2/SDL.h>
+#endif
 #include "ship/Context.h"
 #include "ship/controller/controldeck/ControlDeck.h"
 
@@ -15,6 +17,7 @@ void SDLAddRemoveDeviceEventHandler::DrawElement() {
 }
 
 void SDLAddRemoveDeviceEventHandler::UpdateElement() {
+#if !defined(__ANDROID__)
     SDL_PumpEvents();
     SDL_Event event;
     while (SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_CONTROLLERDEVICEADDED, SDL_CONTROLLERDEVICEADDED) > 0) {
@@ -32,5 +35,6 @@ void SDLAddRemoveDeviceEventHandler::UpdateElement() {
             ->GetConnectedPhysicalDeviceManager()
             ->HandlePhysicalDeviceDisconnect(event.cdevice.which);
     }
+#endif
 }
 } // namespace Ship

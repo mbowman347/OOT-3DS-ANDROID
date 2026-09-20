@@ -13,6 +13,11 @@ bool ConnectedPhysicalDeviceManager::Initialize(const std::string& mappingDataba
     if (mInitialized) {
         return true;
     }
+#if defined(__ANDROID__)
+    // Android uses pure Android overlay/touch inputs, avoiding SDLActivity context requirement.
+    mInitialized = true;
+    return true;
+#else
     SDL_SetHint(SDL_HINT_JOYSTICK_THREAD, "1");
     if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) != 0) {
         SPDLOG_ERROR("SDL controller initialization failed: {}", SDL_GetError());
@@ -32,9 +37,11 @@ bool ConnectedPhysicalDeviceManager::Initialize(const std::string& mappingDataba
     SPDLOG_INFO("SDL controllers initialized: {} joystick(s), {} mapped gamepad(s)",
                 SDL_NumJoysticks(), mConnectedSDLGamepads.size());
     return true;
+#endif
 }
 
 void ConnectedPhysicalDeviceManager::Shutdown() {
+#if !defined(__ANDROID__)
     // The window host can already have called SDL_Quit, which closes handles.
     if (SDL_WasInit(SDL_INIT_GAMECONTROLLER) != 0) {
         for (const auto& [id, controller] : mConnectedSDLGamepads) {
@@ -44,6 +51,7 @@ void ConnectedPhysicalDeviceManager::Shutdown() {
             SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
         }
     }
+#endif
     mInitialized = false;
     mConnectedSDLGamepads.clear();
     mConnectedSDLGamepadNames.clear();
@@ -92,6 +100,7 @@ void ConnectedPhysicalDeviceManager::HandlePhysicalDeviceDisconnect(int32_t sdlJ
 }
 
 void ConnectedPhysicalDeviceManager::RefreshConnectedSDLGamepads() {
+#if !defined(__ANDROID__)
     if (SDL_WasInit(SDL_INIT_GAMECONTROLLER) == 0) {
         return;
     }
@@ -166,5 +175,6 @@ void ConnectedPhysicalDeviceManager::RefreshConnectedSDLGamepads() {
             mIgnoredInstanceIds[port].insert(instanceId);
         }
     }
+#endif
 }
 } // namespace Ship

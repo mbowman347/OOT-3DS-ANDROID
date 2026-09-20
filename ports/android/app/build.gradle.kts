@@ -10,7 +10,6 @@ dependencies {
 }
 
 // Native compilation is a separate incremental build, never a Gradle side effect.
-val sdlSource = providers.gradleProperty("triaevumSdlSource")
 val nativeStage = providers.gradleProperty("triaevumNativeStage")
 android {
     namespace = "org.triaevum.android"
@@ -31,7 +30,6 @@ android {
         jvmTarget = "17"
     }
     sourceSets.getByName("main") {
-        if (sdlSource.isPresent) java.srcDir("${sdlSource.get()}/android-project/app/src/main/java")
         if (nativeStage.isPresent) jniLibs.srcDir(nativeStage.get())
     }
     packaging { jniLibs.useLegacyPackaging = true }
@@ -41,10 +39,10 @@ tasks.register("checkNativeStage") {
         gradle.startParameter.taskNames.any { it.contains("assemble", ignoreCase = true) || it.contains("package", ignoreCase = true) }
     }
     doLast {
-        check(sdlSource.isPresent && nativeStage.isPresent) {
-            "Supply -PtriaevumSdlSource and -PtriaevumNativeStage from the Android native build."
+        check(nativeStage.isPresent) {
+            "Supply -PtriaevumNativeStage from the Android native build."
         }
-        for (name in listOf("SDL2", "TriAevum", "triaevum_title_bootstrap", "triaevum_title_aot", "c++_shared")) {
+        for (name in listOf("TriAevum", "triaevum_title_bootstrap", "triaevum_title_aot", "c++_shared")) {
             check(file("${nativeStage.get()}/arm64-v8a/lib$name.so").isFile) { "Missing native library: $name" }
         }
     }
