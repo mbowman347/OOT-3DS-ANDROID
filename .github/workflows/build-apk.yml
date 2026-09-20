@@ -1,0 +1,59 @@
+name: Build Android APK with Native Title
+
+on:
+  workflow_dispatch: # Allows you to manually click "Run" in GitHub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Android SDK & NDK r29
+      uses: android-actions/setup-android@v3
+
+    - name: Install NDK Component
+      run: |
+        sdkmanager "ndk;29.0.14206865"
+        echo "ANDROID_NDK_HOME=${ANDROID_SDK_ROOT}/ndk/29.0.14206865" >> $GITHUB_ENV
+
+    - name: Extract Uploaded Shards
+      run: |
+        mkdir -p title-source
+        # Unzips the source archive you uploaded directly to your repo root
+        unzip source.zip -d ./title-source/
+        
+        # In case it unzipped into a subfolder, let's normalize it
+        if [ -d "./title-source/source" ]; then
+          mv ./title-source/source/* ./title-source/
+        fi
+
+    - name: Compile Native C++ Libraries
+      run: |
+        export TRIAEVUM_BUILD_TITLE=1
+        export TRIAEVUM_TRANSLATED_TITLE_DIR="${{ github.workspace }}/title-source"
+        export TRIAEVUM_BUILD_DIR="${{ github.workspace }}/triaevum-android-build"
+        export CMAKE_BUILD_PARALLEL_LEVEL=4
+        
+        chmod +x scripts/build-android-native.sh
+        bash scripts/build-android-native.sh
+
+    - name: Build Android APK via Gradle
+      run: |
+        cd ports/android
+        chmod +x gradlew
+        ./gradlew assembleDebug -PtriaevumNativeStage="${{ github.workspace }}/triaevum-android-build"
+
+    - name: Upload Finished APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TriAevum-Android-Debug-APK
+        path: ports/android/app/build/outputs/apk/debug/app-debug.apk
