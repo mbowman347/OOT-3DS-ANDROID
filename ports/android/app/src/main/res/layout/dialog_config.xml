@@ -26,7 +26,7 @@
                 android:id="@+id/tv_config_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="⚙ TriAevum — Configurações"
+                android:text="⚙ TriAevum — Settings"
                 android:textColor="#FFC107"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -55,7 +55,7 @@
                 android:background="@drawable/btn_danger"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="Restaurar Padrões"
+                android:text="Restore Defaults"
                 android:textColor="#FFFFFF"
                 android:textSize="11sp" />
 
@@ -67,7 +67,7 @@
                 android:background="@drawable/btn_gold"
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
-                android:text="Salvar"
+                android:text="Save"
                 android:textColor="#1A1500"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -79,7 +79,7 @@
                 android:background="@drawable/btn_dark"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
-                android:text="Fechar"
+                android:text="Close"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -116,7 +116,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:layout_marginBottom="3dp"
-                    android:text="🌐  Geral"
+                    android:text="🌐  General"
                     android:textColor="#FFD700"
                     android:background="@drawable/tab_selected_bg"
                     android:textSize="12sp"
@@ -129,7 +129,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:layout_marginBottom="3dp"
-                    android:text="🎨  Gráficos"
+                    android:text="🎨  Graphics"
                     android:textColor="#8B9BB4"
                     android:background="@drawable/btn_dark"
                     android:textSize="12sp"
@@ -141,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:layout_marginBottom="3dp"
-                    android:text="📷  Câmera / HUD"
+                    android:text="📷  Camera / HUD"
                     android:textColor="#8B9BB4"
                     android:background="@drawable/btn_dark"
                     android:textSize="12sp"
@@ -153,7 +153,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:layout_marginBottom="3dp"
-                    android:text="🎮  Controles"
+                    android:text="🎮  Controls"
                     android:textColor="#8B9BB4"
                     android:background="@drawable/btn_dark"
                     android:textSize="12sp"
@@ -170,7 +170,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <!-- Panel: Geral -->
+            <!-- Panel: General -->
             <ScrollView
                 android:id="@+id/panel_geral"
                 android:layout_width="match_parent"
@@ -183,7 +183,7 @@
                     android:orientation="vertical"
                     android:padding="4dp">
 
-                    <!-- Idioma -->
+                    <!-- Language -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="IDIOMA DO JOGO"
+                            android:text="GAME LANGUAGE"
                             android:textColor="#FFC107"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -210,7 +210,7 @@
                             android:paddingRight="10dp" />
                     </LinearLayout>
 
-                    <!-- Resolução de Superfície -->
+                    <!-- Surface resolution -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="LIMITE DE RESOLUÇÃO DE SUPERFÍCIE"
+                            android:text="SURFACE RESOLUTION LIMIT"
                             android:textColor="#FFC107"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -231,7 +231,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Define o limite da superfície de renderização Vulkan. 720p = padrão; 1080p = nativo Moto G100."
+                            android:text="Sets the Vulkan render-surface limit. 720p = default; 1080p = native Moto G100."
                             android:textColor="#8B9BB4"
                             android:textSize="10sp"
                             android:layout_marginBottom="8dp" />
@@ -248,7 +248,7 @@
                 </LinearLayout>
             </ScrollView>
 
-            <!-- Panel: Gráficos -->
+            <!-- Panel: Graphics -->
             <ScrollView
                 android:id="@+id/panel_graficos"
                 android:layout_width="match_parent"
@@ -261,7 +261,7 @@
                     android:orientation="vertical"
                     android:padding="4dp">
 
-                    <!-- Renderização -->
+                    <!-- Rendering -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -273,7 +273,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="RENDERIZAÇÃO"
+                            android:text="RENDERING"
                             android:textColor="#FFC107"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -282,7 +282,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:layout_marginBottom="10dp">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Escala de Renderização"
+                                android:layout_weight="1" android:text="Render Scale"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <Spinner android:id="@+id/sp_render_scale"
                                 android:layout_width="140dp" android:layout_height="36dp"
@@ -302,7 +302,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Taxa de Quadros"
+                                android:layout_weight="1" android:text="Frame Rate"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <Spinner android:id="@+id/sp_framerate"
                                 android:layout_width="140dp" android:layout_height="36dp"
@@ -310,7 +310,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Sincronização & Texturas -->
+                    <!-- Sync and textures -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -322,7 +322,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="SINCRONIZAÇÃO E TEXTURAS"
+                            android:text="SYNC AND TEXTURES"
                             android:textColor="#FFC107"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -341,7 +341,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Texturas Customizadas"
+                                android:layout_weight="1" android:text="Custom Textures"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_custom_textures"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -352,7 +352,7 @@
                 </LinearLayout>
             </ScrollView>
 
-            <!-- Panel: Câmera / HUD -->
+            <!-- Panel: Camera / HUD -->
             <ScrollView
                 android:id="@+id/panel_camera"
                 android:layout_width="match_parent"
@@ -365,7 +365,7 @@
                     android:orientation="vertical"
                     android:padding="4dp">
 
-                    <!-- Câmera Livre -->
+                    <!-- Free camera -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -377,7 +377,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="CÂMERA LIVRE (C-STICK)"
+                            android:text="FREE CAMERA (C-STICK)"
                             android:textColor="#FFC107"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -386,7 +386,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:layout_marginBottom="10dp">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Câmera Livre Ativada"
+                                android:layout_weight="1" android:text="Free Camera Enabled"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_free_camera"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -395,7 +395,7 @@
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:id="@+id/tv_cam_speed_label"
-                            android:text="Velocidade: 3"
+                            android:text="Speed: 3"
                             android:textColor="#8B9BB4" android:textSize="11sp" android:layout_marginBottom="4dp" />
                         <SeekBar android:id="@+id/sb_cam_speed"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -406,7 +406,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:layout_marginBottom="6dp">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Inverter Eixo X"
+                                android:layout_weight="1" android:text="Invert X Axis"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_cam_invert_x"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -416,7 +416,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Inverter Eixo Y"
+                                android:layout_weight="1" android:text="Invert Y Axis"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_cam_invert_y"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -444,7 +444,7 @@
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:id="@+id/tv_hud_scale_label"
-                            android:text="Escala HUD: 80%"
+                            android:text="HUD scale: 80%"
                             android:textColor="#8B9BB4" android:textSize="11sp" android:layout_marginBottom="4dp" />
                         <SeekBar android:id="@+id/sb_hud_scale"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -455,7 +455,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:layout_marginBottom="6dp">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Minimapa Visível"
+                                android:layout_weight="1" android:text="Show Minimap"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_minimap"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -465,7 +465,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Ícones no D-Pad"
+                                android:layout_weight="1" android:text="D-Pad Icons"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_dpad_icons"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -476,7 +476,7 @@
                 </LinearLayout>
             </ScrollView>
 
-            <!-- Panel: Controles -->
+            <!-- Panel: Controls -->
             <ScrollView
                 android:id="@+id/panel_controles"
                 android:layout_width="match_parent"
@@ -501,7 +501,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="OVERLAY VIRTUAL"
+                            android:text="VIRTUAL OVERLAY"
                             android:textColor="#FFC107"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -510,7 +510,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:layout_marginBottom="6dp">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Exibir Controles na Tela"
+                                android:layout_weight="1" android:text="Show On-Screen Controls"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_show_overlay"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -519,7 +519,7 @@
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:id="@+id/tv_opacity_label"
-                            android:text="Opacidade dos Controles: 100%"
+                            android:text="Control opacity: 100%"
                             android:textColor="#8B9BB4" android:textSize="11sp" android:layout_marginBottom="2dp" />
                         <SeekBar android:id="@+id/sb_overlay_opacity"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -530,7 +530,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:layout_marginBottom="5dp">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Feedback Háptico / Vibração"
+                                android:layout_weight="1" android:text="Haptic Feedback / Vibration"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_haptic"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -540,7 +540,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:layout_marginBottom="5dp">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Inverter Telas (Superior/Inferior)"
+                                android:layout_weight="1" android:text="Swap Screens (Top/Bottom)"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_swap_screens"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -550,7 +550,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:layout_marginBottom="5dp">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Centro Relativo do Analógico"
+                                android:layout_weight="1" android:text="Relative Analog Center"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_joystick_rel_center"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -560,7 +560,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                                android:layout_weight="1" android:text="Deslize no D-Pad"
+                                android:layout_weight="1" android:text="D-Pad Slide"
                                 android:textColor="#C8D8E8" android:textSize="12sp" android:layout_gravity="center_vertical" />
                             <CheckBox android:id="@+id/cb_dpad_slide"
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"

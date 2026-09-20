@@ -33,7 +33,7 @@ public final class CtrRomExtractor {
 
     public static boolean extractRom(Context context, File romFile, File outputDir, ProgressCallback callback) throws Exception {
         if (!romFile.isFile() || romFile.length() < 0x200) {
-            throw new IOException("Arquivo de ROM inválido ou vazio");
+            throw new IOException("Invalid or empty ROM file");
         }
 
         try (RandomAccessFile raf = new RandomAccessFile(romFile, "r")) {
@@ -55,7 +55,7 @@ public final class CtrRomExtractor {
                 partitionBase = pBaseUnits * MEDIA_UNIT;
                 partitionSize = pSizeUnits * MEDIA_UNIT;
             } else if (!"NCCH".equals(magic)) {
-                throw new IOException("O arquivo baixado não é uma ROM 3DS válida (NCSD/NCCH ausente)");
+                throw new IOException("The downloaded file is not a valid 3DS ROM (NCSD/NCCH missing)");
             }
 
             // 2. Parse partition 0 NCCH
@@ -65,10 +65,10 @@ public final class CtrRomExtractor {
 
             String ncchMagic = new String(ncch, 0x100, 4, StandardCharsets.ISO_8859_1);
             if (!"NCCH".equals(ncchMagic)) {
-                throw new IOException("Partição de jogo NCCH inválida");
+                throw new IOException("Invalid NCCH game partition");
             }
 
-            if (callback != null) callback.onProgress("Extraindo ExHeader...", 5);
+            if (callback != null) callback.onProgress("Extracting ExHeader...", 5);
 
             // 3. ExHeader (at partitionBase + 0x200, size 0x800 = 2048 bytes)
             long exheaderOffset = partitionBase + 0x200L;
@@ -79,7 +79,7 @@ public final class CtrRomExtractor {
 
             boolean compressedCode = (exheader[0x0D] & 1) != 0;
 
-            if (callback != null) callback.onProgress("Extraindo código executável (.code)...", 10);
+            if (callback != null) callback.onProgress("Extracting executable (.code)...", 10);
 
             // 4. ExeFS (code.bin)
             long exefsUnits = readU32LE(ncch, 0x1A0);
@@ -104,7 +104,7 @@ public final class CtrRomExtractor {
             }
 
             if (codeOffset < 0 || codeSize <= 0) {
-                throw new IOException("Seção .code não encontrada no ExeFS (a ROM pode estar criptografada)");
+                throw new IOException(".code section not found in ExeFS (the ROM may be encrypted)");
             }
 
             byte[] codeBytes = new byte[codeSize];
@@ -113,7 +113,7 @@ public final class CtrRomExtractor {
 
             byte[] finalCode;
             if (compressedCode) {
-                if (callback != null) callback.onProgress("Descompactando .code...", 20);
+                if (callback != null) callback.onProgress("Decompressing .code...", 20);
                 finalCode = decompressExeFsCode(codeBytes);
             } else {
                 finalCode = codeBytes;
@@ -122,7 +122,7 @@ public final class CtrRomExtractor {
             // Adapt USA code.bin to canonical EUR code.bin if matching USA revision
             String codeSha = sha256Hex(finalCode);
             if ("ef210566e1d9d16879a746dfb063fcbad232f0171d860de906531ecc526cc020".equalsIgnoreCase(codeSha)) {
-                if (callback != null) callback.onProgress("Adaptando executável regional...", 25);
+                if (callback != null) callback.onProgress("Adapting regional executable...", 25);
                 finalCode = adaptUsaCodeToEur(context, finalCode);
             }
             writeFile(new File(outputDir, "code.bin"), finalCode);
@@ -134,7 +134,7 @@ public final class CtrRomExtractor {
             long romfsSize = romfsSizeUnits * MEDIA_UNIT;
 
             if (romfsOffset <= 0 || romfsSize <= 0) {
-                throw new IOException("Seção RomFS ausente no NCCH");
+                throw new IOException("RomFS section missing from NCCH");
             }
 
             raf.seek(romfsOffset);
@@ -142,14 +142,14 @@ public final class CtrRomExtractor {
             raf.readFully(ivfcCheck);
             String ivfc = new String(ivfcCheck, StandardCharsets.ISO_8859_1);
             if (!"IVFC".equals(ivfc)) {
-                throw new IOException("RomFS não é válida ou está criptografada (IVFC não encontrado)");
+                throw new IOException("RomFS is invalid or encrypted (IVFC not found)");
             }
 
             // Skip the 0x1000 IVFC superblock to get the pure Level-3 RomFS service view
             long level3Offset = romfsOffset + 0x1000L;
             long level3Size = romfsSize - 0x1000L;
 
-            if (callback != null) callback.onProgress("Extraindo RomFS dos dados do jogo...", 30);
+            if (callback != null) callback.onProgress("Extracting game RomFS...", 30);
 
             // Stream copy RomFS with chunked progress
             File romfsDest = new File(outputDir, "romfs.bin");
@@ -168,7 +168,7 @@ public final class CtrRomExtractor {
 
                     if (callback != null) {
                         int progress = (int) (30 + (totalCopied * 65 / level3Size));
-                        callback.onProgress(String.format("Extraindo RomFS (%.0f MB / %.0f MB)...",
+                        callback.onProgress(String.format("Extracting RomFS (%.0f MB / %.0f MB)...",
                                 totalCopied / (1024.0 * 1024.0), level3Size / (1024.0 * 1024.0)), progress);
                     }
                 }
@@ -176,10 +176,10 @@ public final class CtrRomExtractor {
             }
 
             // Normalize USA regional directories and QM tables if needed
-            if (callback != null) callback.onProgress("Verificando adaptação de recursos regionais...", 96);
+            if (callback != null) callback.onProgress("Checking regional resource adaptation...", 96);
             normalizeRomFsIfNeeded(romfsDest);
 
-            Log.i(TAG, "Extração e adaptação da ROM 3DS concluída com sucesso!");
+            Log.i(TAG, "3DS ROM extraction and adaptation completed successfully");
             return true;
         }
     }
@@ -389,7 +389,7 @@ public final class CtrRomExtractor {
 
     private static byte[] decompressExeFsCode(byte[] compressed) throws IOException {
         if (compressed.length < 8) {
-            throw new IOException("ExeFS .code comprimido muito pequeno");
+            throw new IOException("Compressed ExeFS .code is too small");
         }
         int len = compressed.length;
         long bufferTopBottom = readU32LE(compressed, len - 8);
@@ -411,7 +411,7 @@ public final class CtrRomExtractor {
             for (int i = 0; i < 8; i++) {
                 if (index <= stopIndex || outputIndex == 0) break;
                 if ((control & 0x80) != 0) {
-                    if (index < 2) throw new IOException("Referência de compressão truncada");
+                    if (index < 2) throw new IOException("Truncated compression back-reference");
                     index -= 2;
                     int b0 = compressed[index] & 0xFF;
                     int b1 = compressed[index + 1] & 0xFF;
@@ -428,7 +428,7 @@ public final class CtrRomExtractor {
                     }
                 } else {
                     if (index <= stopIndex || outputIndex == 0) {
-                        throw new IOException("Literal de compressão truncado");
+                        throw new IOException("Truncated compression literal");
                     }
                     index--;
                     outputIndex--;

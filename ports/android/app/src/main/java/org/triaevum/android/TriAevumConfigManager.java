@@ -24,21 +24,21 @@ public final class TriAevumConfigManager {
     private static final String TAG = "TriAevumConfig";
 
     // ------- game_language.json -------
-    public static final String[] LANGUAGE_LABELS  = { "English", "Francais", "Espanol" };
+    public static final String[] LANGUAGE_LABELS  = { "English", "French", "Spanish" };
     public static final String[] LANGUAGE_CODES   = { "en",      "fr",       "es"      };
 
     // ------- oot3d_native_game.json ---
-    public static final String[] RENDER_SCALE_LABELS = { "0.5x", "1.0x (Padrão)", "1.5x", "2.0x", "3.0x", "4.0x" };
+    public static final String[] RENDER_SCALE_LABELS = { "0.5x", "1.0x (Default)", "1.5x", "2.0x", "3.0x", "4.0x" };
     public static final float[]  RENDER_SCALE_VALUES = {  0.5f,   1.0f,             1.5f,   2.0f,   3.0f,   4.0f  };
 
-    public static final String[] AA_MODE_LABELS   = { "Desligado", "FXAA", "TAA", "MSAA 2x", "MSAA 4x" };
+    public static final String[] AA_MODE_LABELS   = { "Off", "FXAA", "TAA", "MSAA 2x", "MSAA 4x" };
     public static final String[] AA_MODE_VALUES   = { "Off",       "FXAA", "TAA", "MSAA2x",  "MSAA4x"  };
 
-    public static final String[] FRAMERATE_LABELS = { "30 FPS (Original)", "60 FPS (Nativo)" };
+    public static final String[] FRAMERATE_LABELS = { "30 FPS (Original)", "60 FPS (Native)" };
     public static final String[] FRAMERATE_VALUES = { "Original30",         "Interpolated2x" };
 
     // ------- TriAevum.android.host.json ---
-    public static final String[] SURFACE_RES_LABELS = { "720p (Padrão)", "1080p (Nativo Moto G100)", "Sem Limite" };
+    public static final String[] SURFACE_RES_LABELS = { "720p (Default)", "1080p (Native Moto G100)", "Unlimited" };
     public static final int[]    SURFACE_RES_VALUES = { 720,              1080,                        0           };
 
     // -------------------------------------------------------------------------

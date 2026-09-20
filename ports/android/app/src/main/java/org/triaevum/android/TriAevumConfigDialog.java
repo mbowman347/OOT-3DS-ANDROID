@@ -47,18 +47,18 @@ public final class TriAevumConfigDialog extends Dialog {
     // Panels
     private View mPanelGeral, mPanelGraficos, mPanelCamera, mPanelControles;
 
-    // Geral
+    // General
     private Spinner mSpLanguage;
     private Spinner mSpSurfaceRes;
 
-    // Gráficos
+    // Graphics
     private Spinner mSpRenderScale;
     private Spinner mSpAAMode;
     private Spinner mSpFramerate;
     private CheckBox mCbVSync;
     private CheckBox mCbCustomTextures;
 
-    // Câmera / HUD
+    // Camera / HUD
     private CheckBox mCbFreeCamera;
     private SeekBar  mSbCamSpeed;
     private TextView mTvCamSpeedLabel;
@@ -69,7 +69,7 @@ public final class TriAevumConfigDialog extends Dialog {
     private CheckBox mCbMinimap;
     private CheckBox mCbDpadIcons;
 
-    // Controles
+    // Controls
     private CheckBox mCbShowOverlay;
     private SeekBar  mSbOpacity;
     private TextView mTvOpacityLabel;
@@ -132,18 +132,18 @@ public final class TriAevumConfigDialog extends Dialog {
         mPanelCamera   = findViewById(R.id.panel_camera);
         mPanelControles= findViewById(R.id.panel_controles);
 
-        // Geral
+        // General
         mSpLanguage   = findViewById(R.id.sp_language);
         mSpSurfaceRes = findViewById(R.id.sp_surface_resolution);
 
-        // Gráficos
+        // Graphics
         mSpRenderScale    = findViewById(R.id.sp_render_scale);
         mSpAAMode         = findViewById(R.id.sp_aa_mode);
         mSpFramerate      = findViewById(R.id.sp_framerate);
         mCbVSync          = findViewById(R.id.cb_vsync);
         mCbCustomTextures = findViewById(R.id.cb_custom_textures);
 
-        // Câmera / HUD
+        // Camera / HUD
         mCbFreeCamera    = findViewById(R.id.cb_free_camera);
         mSbCamSpeed      = findViewById(R.id.sb_cam_speed);
         mTvCamSpeedLabel = findViewById(R.id.tv_cam_speed_label);
@@ -154,7 +154,7 @@ public final class TriAevumConfigDialog extends Dialog {
         mCbMinimap       = findViewById(R.id.cb_minimap);
         mCbDpadIcons     = findViewById(R.id.cb_dpad_icons);
 
-        // Controles
+        // Controls
         mCbShowOverlay       = findViewById(R.id.cb_show_overlay);
         mSbOpacity           = findViewById(R.id.sb_overlay_opacity);
         mTvOpacityLabel      = findViewById(R.id.tv_opacity_label);
@@ -234,7 +234,7 @@ public final class TriAevumConfigDialog extends Dialog {
         mCbFreeCamera.setChecked(mConfig.isFreeCameraEnabled());
         int speedLevel = mConfig.getFreeCameraSpeedLevel();
         mSbCamSpeed.setProgress(speedLevel - 1); // 0-4 → levels 1-5
-        mTvCamSpeedLabel.setText("Velocidade: " + speedLevel);
+        mTvCamSpeedLabel.setText("Speed: " + speedLevel);
         mCbCamInvertX.setChecked(mConfig.isFreeCameraInvertX());
         mCbCamInvertY.setChecked(mConfig.isFreeCameraInvertY());
 
@@ -243,7 +243,7 @@ public final class TriAevumConfigDialog extends Dialog {
         // map 0.5-1.5 → seekbar 0-10
         int hudProg = Math.round((hudScale - 0.5f) / 0.1f);
         mSbHudScale.setProgress(Math.max(0, Math.min(10, hudProg)));
-        mTvHudScaleLabel.setText("Escala HUD: " + hudPct + "%");
+        mTvHudScaleLabel.setText("HUD scale: " + hudPct + "%");
         mCbMinimap.setChecked(mConfig.isMinimapVisible());
         mCbDpadIcons.setChecked(mConfig.isRenderDpadIcons());
         Log.d(TAG, "  freeCamera=" + mConfig.isFreeCameraEnabled()
@@ -276,12 +276,12 @@ public final class TriAevumConfigDialog extends Dialog {
         int overlayOpacity = 100;
         if (mOverlay != null) overlayOpacity = mOverlay.getOverlayOpacityPercent();
         mSbOpacity.setProgress(overlayOpacity);
-        mTvOpacityLabel.setText("Opacidade dos Controles: " + overlayOpacity + "%");
+        mTvOpacityLabel.setText("Control opacity: " + overlayOpacity + "%");
 
         // SeekBar live listeners
         mSbCamSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar sb, int progress, boolean fromUser) {
-                mTvCamSpeedLabel.setText("Velocidade: " + (progress + 1));
+                mTvCamSpeedLabel.setText("Speed: " + (progress + 1));
             }
             @Override public void onStartTrackingTouch(SeekBar sb) {}
             @Override public void onStopTrackingTouch(SeekBar sb) {}
@@ -290,7 +290,7 @@ public final class TriAevumConfigDialog extends Dialog {
         mSbHudScale.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar sb, int progress, boolean fromUser) {
                 float scale = 0.5f + progress * 0.1f;
-                mTvHudScaleLabel.setText("Escala HUD: " + Math.round(scale * 100) + "%");
+                mTvHudScaleLabel.setText("HUD scale: " + Math.round(scale * 100) + "%");
             }
             @Override public void onStartTrackingTouch(SeekBar sb) {}
             @Override public void onStopTrackingTouch(SeekBar sb) {}
@@ -299,7 +299,7 @@ public final class TriAevumConfigDialog extends Dialog {
         mSbOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar sb, int progress, boolean fromUser) {
                 int pct = Math.max(20, progress); // minimum 20%
-                mTvOpacityLabel.setText("Opacidade dos Controles: " + pct + "%");
+                mTvOpacityLabel.setText("Control opacity: " + pct + "%");
                 if (fromUser && mOverlay != null) {
                     mOverlay.setOverlayOpacityPercent(pct);
                 }
@@ -353,7 +353,7 @@ public final class TriAevumConfigDialog extends Dialog {
         btnSave.setOnClickListener(v -> {
             saveToConfig();
             mConfig.applyLiveSettings();
-            Toast.makeText(getContext(), "Configurações salvas e aplicadas!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Settings saved and applied!", Toast.LENGTH_SHORT).show();
             dismiss();
         });
 
@@ -380,7 +380,7 @@ public final class TriAevumConfigDialog extends Dialog {
                 Log.w(TAG, "Failed to reset nativeSwapScreens", t);
             }
             loadFromConfig();
-            Toast.makeText(getContext(), "Padrões restaurados e aplicados.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Defaults restored and applied.", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -390,7 +390,7 @@ public final class TriAevumConfigDialog extends Dialog {
 
     private void saveToConfig() {
         Log.d(TAG, "--- saveToConfig START ---");
-        // Geral
+        // General
         int langIdx = mSpLanguage.getSelectedItemPosition();
         if (langIdx >= 0 && langIdx < TriAevumConfigManager.LANGUAGE_CODES.length) {
             String lang = TriAevumConfigManager.LANGUAGE_CODES[langIdx];
@@ -405,7 +405,7 @@ public final class TriAevumConfigDialog extends Dialog {
             mConfig.setSurfaceMaxShortEdge(edge);
         }
 
-        // Gráficos
+        // Graphics
         int rsIdx = mSpRenderScale.getSelectedItemPosition();
         if (rsIdx >= 0 && rsIdx < TriAevumConfigManager.RENDER_SCALE_VALUES.length) {
             float rs = TriAevumConfigManager.RENDER_SCALE_VALUES[rsIdx];
@@ -432,7 +432,7 @@ public final class TriAevumConfigDialog extends Dialog {
         Log.d(TAG, "  SET customTextures -> " + mCbCustomTextures.isChecked());
         mConfig.setCustomTexturesEnabled(mCbCustomTextures.isChecked());
 
-        // Câmera / HUD
+        // Camera / HUD
         Log.d(TAG, "  SET freeCamera -> " + mCbFreeCamera.isChecked());
         mConfig.setFreeCameraEnabled(mCbFreeCamera.isChecked());
         Log.d(TAG, "  SET camSpeedLevel -> " + (mSbCamSpeed.getProgress() + 1));
@@ -445,7 +445,7 @@ public final class TriAevumConfigDialog extends Dialog {
         mConfig.setMinimapVisible(mCbMinimap.isChecked());
         mConfig.setRenderDpadIcons(mCbDpadIcons.isChecked());
 
-        // Controles — write directly to SharedPreferences (same keys as EmulationMenuSettings)
+        // Controls — write directly to SharedPreferences (same keys as EmulationMenuSettings)
         boolean showOverlay = mCbShowOverlay.isChecked();
         boolean haptic = mCbHaptic.isChecked();
         boolean swapScr = mCbSwapScreens.isChecked();

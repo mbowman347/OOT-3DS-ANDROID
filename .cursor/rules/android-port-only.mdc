@@ -1,0 +1,18 @@
+---
+description: Restrict all work to the Android port under ports/android
+alwaysApply: true
+---
+
+# Android Port Scope
+
+Every request in this workspace is for the **Android port only**.
+
+- **In scope:** `ports/android/` (app, controls, native, runtime, renderer, Gradle, docs in that tree).
+- **Out of scope unless the user explicitly asks:** other ports (`ports/switch_*`, etc.), desktop/shared tree changes that are not required to ship or fix Android, and repo-wide refactors.
+
+When implementing, debugging, or answering:
+
+1. Read, edit, and search under `ports/android/` first.
+2. Touch files outside that folder only if the Android port cannot work without that change, and say so in the reply.
+3. Do not start Switch, desktop, or generic multi-port work from an Android-flavored request.
+4. Prefer Android host/runtime/APK behavior over reconstructing emulator or other-platform paths.

@@ -63,6 +63,8 @@ public class TriAevumDownloadActivity extends Activity {
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private volatile boolean mIsDownloading = false;
     private volatile boolean mReadyToStart = false;
+    private boolean mStartupStarted = false;
+    private boolean mWaitingForStorageSettings = false;
 
     public static boolean isGameInstalled(Context context) {
         File root = context.getExternalFilesDir(null);
@@ -78,12 +80,6 @@ public class TriAevumDownloadActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Fast path: if the game is already installed, launch immediately
-        if (isGameInstalled(this)) {
-            launchGame();
-            return;
-        }
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getWindow().getAttributes().layoutInDisplayCutoutMode =
@@ -91,6 +87,27 @@ public class TriAevumDownloadActivity extends Activity {
         }
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         hideSystemBars();
+
+        if (StorageAccessHelper.shouldPromptOnFirstLaunch(this)) {
+            StorageAccessHelper.showFirstLaunchPrompt(this,
+                () -> mWaitingForStorageSettings = true,
+                this::continueAfterStoragePrompt);
+            return;
+        }
+
+        continueAfterStoragePrompt();
+    }
+
+    private void continueAfterStoragePrompt() {
+        if (mStartupStarted) return;
+        mStartupStarted = true;
+        mWaitingForStorageSettings = false;
+
+        // Fast path: if the game is already installed, launch immediately
+        if (isGameInstalled(this)) {
+            launchGame();
+            return;
+        }
 
         setContentView(R.layout.activity_downloader);
 
@@ -138,7 +155,7 @@ public class TriAevumDownloadActivity extends Activity {
         }
         mReadyToStart = true;
         mIsDownloading = false;
-        mTvStatus.setText("Download e extração concluídos!");
+        mTvStatus.setText("Download and extraction complete!");
         mPbDownload.setProgress(100);
         mTvPercent.setText("100%");
         mLayoutProgressDetails.setVisibility(View.GONE);
@@ -155,6 +172,25 @@ public class TriAevumDownloadActivity extends Activity {
     protected void onResume() {
         super.onResume();
         hideSystemBars();
+        if (mWaitingForStorageSettings && !mStartupStarted) {
+            continueAfterStoragePrompt();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == StorageAccessHelper.REQUEST_MANAGE_STORAGE) {
+            continueAfterStoragePrompt();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == StorageAccessHelper.REQUEST_LEGACY_STORAGE) {
+            continueAfterStoragePrompt();
+        }
     }
 
     private void hideSystemBars() {
@@ -182,13 +218,13 @@ public class TriAevumDownloadActivity extends Activity {
         mBtnAction.setVisibility(View.GONE);
         mTvTouchToStart.setVisibility(View.GONE);
         mLayoutProgressDetails.setVisibility(View.VISIBLE);
-        mTvStatus.setText("Conectando ao servidor...");
+        mTvStatus.setText("Connecting to the server...");
         mPbDownload.setIndeterminate(true);
 
         mExecutor.execute(() -> {
             File targetDir = getExternalFilesDir(null);
             if (targetDir == null) {
-                showError("Armazenamento externo indisponível");
+                showError("External storage is unavailable");
                 return;
             }
             if (!targetDir.exists()) targetDir.mkdirs();
@@ -209,11 +245,11 @@ public class TriAevumDownloadActivity extends Activity {
 
                 // 3. Extract downloaded content (ZIP or direct 3DS / CCI ROM)
                 mMainHandler.post(() -> {
-                    mTvStatus.setText("Extraindo arquivos do jogo...");
+                    mTvStatus.setText("Extracting game files...");
                     mPbDownload.setIndeterminate(false);
                     mPbDownload.setProgress(0);
                     mTvPercent.setText("0%");
-                    mTvDetails.setText("Processando ROM...");
+                    mTvDetails.setText("Processing ROM...");
                 });
 
                 if (isZipFile(tempDownloadFile)) {
@@ -225,7 +261,7 @@ public class TriAevumDownloadActivity extends Activity {
                             mTvStatus.setText(stage);
                             mPbDownload.setProgress(percent);
                             mTvPercent.setText(percent + "%");
-                            mTvDetails.setText("Extraindo partição NCCH...");
+                            mTvDetails.setText("Extracting NCCH partition...");
                         });
                     });
                 }
@@ -237,16 +273,16 @@ public class TriAevumDownloadActivity extends Activity {
                 new File(targetDir, "resources").mkdirs();
                 new File(targetDir, "savedata").mkdirs();
 
-                // 4. Success! Show "TOQUE NA TELA PARA INICIAR"
+                // 4. Success! Show "TAP THE SCREEN TO START"
                 mMainHandler.post(() -> {
                     mReadyToStart = true;
                     mIsDownloading = false;
-                    mTvStatus.setText("Download e extração concluídos com sucesso!");
+                    mTvStatus.setText("Download and extraction completed successfully!");
                     mPbDownload.setProgress(100);
                     mTvPercent.setText("100%");
                     mLayoutProgressDetails.setVisibility(View.GONE);
 
-                    // Glowing pulse animation on "TOQUE NA TELA PARA INICIAR"
+                    // Glowing pulse animation on "TAP THE SCREEN TO START"
                     mTvTouchToStart.setVisibility(View.VISIBLE);
                     AlphaAnimation pulse = new AlphaAnimation(0.25f, 1.0f);
                     pulse.setDuration(600);
@@ -257,7 +293,7 @@ public class TriAevumDownloadActivity extends Activity {
 
             } catch (Exception e) {
                 Log.e(TAG, "Download/Extraction error", e);
-                showError("Erro: " + e.getMessage());
+                showError("Error: " + e.getMessage());
             }
         });
     }
@@ -267,9 +303,9 @@ public class TriAevumDownloadActivity extends Activity {
         mMainHandler.post(() -> {
             mTvStatus.setText(msg);
             mPbDownload.setIndeterminate(false);
-            mTvDetails.setText("Toque em 'Tentar Novamente' para reiniciar.");
+            mTvDetails.setText("Tap Retry to start again.");
             mBtnAction.setVisibility(View.VISIBLE);
-            mBtnAction.setText("Tentar Novamente");
+            mBtnAction.setText("Retry");
         });
     }
 
@@ -312,18 +348,18 @@ public class TriAevumDownloadActivity extends Activity {
             break;
         }
 
-        if (conn == null) throw new IllegalStateException("Falha ao abrir conexão");
+        if (conn == null) throw new IllegalStateException("Failed to open connection");
 
         int finalCode = conn.getResponseCode();
         if (finalCode != HttpURLConnection.HTTP_OK && finalCode != 206) {
-            throw new IllegalStateException("Servidor retornou HTTP " + finalCode);
+            throw new IllegalStateException("Server returned HTTP " + finalCode);
         }
 
         long contentLength = conn.getContentLengthLong();
         final long totalBytes = contentLength > 0 ? contentLength : -1;
 
         mMainHandler.post(() -> {
-            mTvStatus.setText("Baixando The Legend of Zelda: Ocarina of Time 3D...");
+            mTvStatus.setText("Downloading The Legend of Zelda: Ocarina of Time 3D...");
             mPbDownload.setIndeterminate(totalBytes <= 0);
             if (totalBytes > 0) mPbDownload.setMax(100);
         });
@@ -357,7 +393,7 @@ public class TriAevumDownloadActivity extends Activity {
                             mTvDetails.setText(String.format(Locale.US, "%.1f MB / %.1f MB (%.2f MB/s)", currentMB, totalMB, speedMBs));
                         } else {
                             double currentMB = currentRead / (1024.0 * 1024.0);
-                            mTvDetails.setText(String.format(Locale.US, "%.1f MB baixados (%.2f MB/s)", currentMB, speedMBs));
+                            mTvDetails.setText(String.format(Locale.US, "%.1f MB downloaded (%.2f MB/s)", currentMB, speedMBs));
                         }
                     });
                 }
